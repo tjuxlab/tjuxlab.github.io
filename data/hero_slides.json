@@ -1,0 +1,15 @@
+[
+  {
+    "id": "s-001",
+    "tagZh": "最新发布",
+    "tagEn": "Latest",
+    "titleZh": "下一代视觉智能平台发布",
+    "titleEn": "Next-gen Vision Intelligence Platform",
+    "descriptionZh": "融合大模型与视觉算法，全面提升科研、工业与城市场景的智能感知能力。",
+    "descriptionEn": "Integrating foundation models with vision AI to power smarter cities, industries, and research labs.",
+    "link": "https://cic.tju.edu.cn/",
+    "media": "image/顶端横幅/1.png",
+    "mediaType": "image",
+    "subImages": []
+  }
+]
