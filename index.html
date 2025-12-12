@@ -1,0 +1,219 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>X-Lab | 官方网站</title>
+  <meta name="description" content="X-Lab官网，展示研究方向、关键技术、精选出版物及团队成员等信息。">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <header class="site-header" id="top">
+    <a class="logo" href="index.html">
+      <img class="logo-mark" src="image/eye.png" alt="X-Lab Logo">
+      <div class="logo-text">
+        <strong data-i18n="siteNameZh">X-Lab</strong>
+        <span data-i18n="siteNameEn">X-Lab</span>
+      </div>
+    </a>
+    <div class="header-actions">
+      <nav class="main-nav" aria-label="主导航" data-i18n-attr="aria-label:navAriaLabel">
+        <button class="nav-toggle" aria-expanded="false" aria-controls="nav-menu">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+        <ul id="nav-menu">
+          <li><a data-i18n="navHome" href="#hero">首页</a></li>
+          <li><a data-i18n="navResearch" href="#research">研究方向</a></li>
+          <li><a data-i18n="navTeam" href="team.html">团队成员</a></li>
+          <li><a data-i18n="navKeyTech" href="#key-tech">科研成果</a></li>
+          <li><a data-i18n="navPublications" href="#publications">出版物</a></li>
+          <li><a data-i18n="navJoin" href="#contact">联系我们</a></li>
+        </ul>
+      </nav>
+      <div class="lang-switch" role="group" aria-label="语言切换" data-i18n-attr="aria-label:langSwitchLabel">
+        <div class="lang-indicator"></div>
+        <button type="button" class="lang-btn active" data-lang="zh" data-i18n="langChinese">中文</button>
+        <button type="button" class="lang-btn" data-lang="en" data-i18n="langEnglish">EN</button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero-slider" aria-label="精选横幅">
+      <div class="slider-track" id="hero-slider"></div>
+      <button class="slider-nav prev" aria-label="上一张">
+        <span>&larr;</span>
+      </button>
+      <button class="slider-nav next" aria-label="下一张">
+        <span>&rarr;</span>
+      </button>
+      <div class="slider-dots" role="tablist" aria-label="横幅分页"></div>
+    </section>
+
+    <section class="hero" id="hero">
+      <div class="hero-media" role="presentation" aria-hidden="true">
+        <div class="pulse-layer layer-1"></div>
+        <div class="pulse-layer layer-2"></div>
+        <div class="pulse-layer layer-3"></div>
+      </div>
+      <div class="hero-content">
+        <p class="eyebrow" data-i18n="heroEyebrow">探索科学前沿 · 驱动未来智能</p>
+        <h1 data-i18n="heroHeadline">Stay Simple • Stay Diverse</h1>
+        <p class="intro" data-i18n="heroIntro">
+          X-Lab聚焦视觉智能、模式识别与多模态 AI，打造从基础理论到产业落地的全链条创新平台。
+        </p>
+        <div class="hero-ctas">
+          <a class="btn primary" href="#research" data-i18n="heroCTAResearch">探索研究方向</a>
+          <a class="btn ghost" href="team.html" data-i18n="heroCTATeam">团队介绍</a>
+          <a class="btn ghost" href="#contact" data-i18n="heroCTAJoin">联系我们</a>
+        </div>
+      </div>
+      <div class="hero-stats">
+        <article>
+          <strong>120+</strong>
+          <span data-i18n="heroStatPapers">学术论文 (Top-tier)</span>
+        </article>
+        <article>
+          <strong>30+</strong>
+          <span data-i18n="heroStatProjects">合作项目</span>
+        </article>
+        <article>
+          <strong>20+</strong>
+          <span data-i18n="heroStatPartners">国际合作伙伴</span>
+        </article>
+      </div>
+    </section>
+
+    <section class="image-wall-section" id="image-wall">
+      <div class="image-wall-container">
+        <div class="image-wall-track is-empty" id="image-wall-track">
+          <!-- Images will be injected here -->
+        </div>
+      </div>
+    </section>
+
+    <section class="research" id="research">
+      <header class="section-heading">
+        <h2 data-i18n="researchHeading">核心研究方向</h2>
+        <p data-i18n="researchSubheading">围绕人工智能与计算机视觉的关键议题，布局未来十年的技术突破口。</p>
+      </header>
+      <div class="research-grid">
+        <article class="research-card">
+          <h3 data-i18n="researchCard1Title">底层视觉恢复</h3>
+          <p data-i18n="researchCard1Desc">涵盖超分、低光增强、去除雨雪雾等任务，构建端到端恢复工具箱（如 XReflection），保障真实应用的稳定输出。</p>
+          <a href="research-detail.html?id=rr1" class="link" data-i18n="researchLearnMore">了解详情</a>
+        </article>
+        <article class="research-card">
+          <h3 data-i18n="researchCard3Title">高层视觉感知</h3>
+          <p data-i18n="researchCard3Desc">面向跨域目标检测与语义分割，探索鲁棒特征对齐、时空特征聚合与轻量化推理策略，支撑城市与工业场景的实时智能感知。</p>
+          <a href="research-detail.html?id=rr3" class="link" data-i18n="researchLearnMore">了解详情</a>
+        </article>
+        <article class="research-card">
+          <h3 data-i18n="researchCard4Title">多模态融合</h3>
+          <p data-i18n="researchCard4Desc">面向视觉、语言与异构传感器的协同理解，构建统一的多模态模型与对齐机制，兼顾泛化、解释性与实时性，赋能更鲁棒的智能决策。</p>
+          <a href="research-detail.html?id=rr4" class="link" data-i18n="researchLearnMore">了解详情</a>
+        </article>
+      </div>
+    </section>
+
+    <!--
+    <section class="team" id="team">
+      <header class="section-heading">
+        <h2 data-i18n="teamHeading">团队介绍</h2>
+        <p data-i18n="teamSubheading">跨学科精英团队，汇聚计算机视觉、机器学习、模式识别与多模态视觉模型的顶尖人才。</p>
+      </header>
+      <div class="team-highlight" id="team-highlight"></div>
+      <div class="team-cta">
+        <a class="btn ghost" href="team.html" data-i18n="teamCTA">查看完整团队</a>
+      </div>
+    </section>
+    -->
+
+    <section class="key-tech" id="key-tech">
+      <header class="section-heading">
+        <h2 data-i18n="keyTechHeading">关键技术与代表性成果</h2>
+        <p data-i18n="keyTechSubheading">从原创算法到产业级系统，持续输出高影响力的科研成果。</p>
+      </header>
+      <div class="tech-showcase" id="key-tech-list"></div>
+    </section>
+
+    <section class="publications" id="publications">
+      <header class="section-heading">
+        <h2 data-i18n="pubsHeading">精选出版物</h2>
+        <p data-i18n="pubsSubheading">聚焦顶级会议与期刊的最新成果，展现我们在视觉智能与多模态 AI 领域的持续突破。</p>
+      </header>
+      <div class="pub-list" id="pub-featured"></div>
+      <div class="publications-cta">
+        <a class="btn primary" href="publications.html" data-i18n="pubsCTA">查看全部出版物</a>
+      </div>
+    </section>
+
+    <section class="partners-showcase" id="partners">
+      <header class="section-heading">
+        <h2 data-i18n="partnersHeading">合作伙伴</h2>
+        <p data-i18n="partnersSubheading">携手产业与科研伙伴，共同推动视觉智能技术的应用与落地。</p>
+      </header>
+      <div class="partners-grid" id="partners-grid"></div>
+    </section>
+
+    <section class="join" id="join">
+      <div class="join-content">
+        <h2 data-i18n="joinHeading">与我们一起探索未来智能</h2>
+        <p data-i18n="joinDescription">
+          欢迎对计算机视觉、模式识别、机器学习充满热情与创新精神的同学加入，如有兴趣请将个人简历发送给我们。
+        </p>
+        <p class="join-email" data-i18n="joinEmail">邮箱： xj.max.guo (at) gmail.com</p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer" id="contact">
+    <div class="footer-top">
+      <div>
+        <h3 data-i18n="footerContactTitle">联系我们</h3>
+        <ul class="contact-list">
+          <li><strong data-i18n="footerAddressLabel">地址： </strong><span data-i18n="footerAddressText">中国天津市津南区雅观路135号天津大学</span></li>
+          <li><strong data-i18n="footerEmailLabel">邮箱： </strong><span data-i18n="footerEmailText">xj.max.guo (at) gmail.com</span></li>
+        </ul>
+      </div>
+      <div>
+        <h3 data-i18n="footerLinksTitle">快速链接</h3>
+        <ul class="quick-links">
+          <li><a href="#research" data-i18n="navResearch">研究方向</a></li>
+          <li><a href="team.html" data-i18n="navTeam">团队成员</a></li>
+          <li><a href="#key-tech" data-i18n="navKeyTech">科研成果</a></li>
+        <li><a href="#publications" data-i18n="navPublications">出版物</a></li>
+      </ul>
+    </div>
+      <div class="footer-follow">
+        <div class="footer-follow-row">
+          <div class="footer-follow-main">
+            <h3 data-i18n="footerFollowTitle">关注我们</h3>
+            <ul class="social-links">
+              <li><a href="https://github.com/tjuxlab" target="_blank" rel="noopener" data-i18n="footerSocialGithub">GitHub</a></li>
+            </ul>
+          </div>
+          <div class="footer-visitstats">
+            <div>👁️ 总访问量：<span id="busuanzi_value_site_pv"></span></div>
+            <div>👤 访客数：<span id="busuanzi_value_site_uv"></span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p data-i18n="footerCopyright">© 2024 X-Lab · 版权所有 </p>
+    </div>
+  </footer>
+
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+  <!-- Cloudflare Web Analytics -->
+  <script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "cb5cb0e3a2be4575a4b5a6847ba95cbc"}'></script>
+  <!-- End Cloudflare Web Analytics -->
+  <script src="app.js"></script>
+</body>
+</html>

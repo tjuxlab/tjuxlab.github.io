@@ -1,0 +1,385 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>X-Lab | 团队成员</title>
+  <meta name="description" content="X-Lab团队成员介绍，了解核心教师、博士、硕士与毕业生。">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    body.team-page[data-lang="en"] .page-hero .hero-content {
+      max-width: 760px;
+    }
+  </style>
+</head>
+<body class="team-page">
+  <header class="site-header" id="top">
+    <a class="logo" href="index.html">
+      <img class="logo-mark" src="image/logo.png" alt="X-Lab Logo">
+      <div class="logo-text">
+        <strong>X-Lab</strong>
+        <span>X-Lab</span>
+      </div>
+    </a>
+    <div class="header-actions">
+      <nav class="main-nav" aria-label="主导航" data-i18n-attr="aria-label:navAriaLabel">
+        <button class="nav-toggle" aria-expanded="false" aria-controls="nav-menu">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+        <ul id="nav-menu">
+          <li><a href="index.html#hero" data-i18n="navHome">首页</a></li>
+          <li><a href="index.html#research" data-i18n="navResearch">研究方向</a></li>
+          <li><a href="#team-profiles" data-i18n="navTeam">团队成员</a></li>
+          <li><a href="index.html#key-tech" data-i18n="navKeyTech">科研成果</a></li>
+          <li><a href="publications.html" data-i18n="navPublications">出版物</a></li>
+          <li><a href="index.html#contact" data-i18n="navJoin">联系我们</a></li>
+        </ul>
+      </nav>
+      <div class="lang-switch" role="group" aria-label="语言切换" data-i18n-attr="aria-label:langSwitchLabel">
+        <div class="lang-indicator"></div>
+        <button type="button" class="lang-btn active" data-lang="zh" data-i18n="langChinese">中文</button>
+        <button type="button" class="lang-btn" data-lang="en" data-i18n="langEnglish">EN</button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="page-hero team-hero">
+      <div class="hero-content">
+        <p class="eyebrow" data-i18n="heroEyebrow">X-Lab · 团队</p>
+        <h1 data-i18n="heroHeadline">聚集优秀人才，驱动智能研究</h1>
+        <p class="intro" data-i18n="heroIntro">团队覆盖计算机视觉方向，以开放协作的方式推动科研成果落地。</p>
+      </div>
+    </section>
+
+    <section class="team archive" id="team-profiles">
+      <header class="section-heading">
+        <h2 data-i18n="teamHeading">核心团队</h2>
+        
+      </header>
+      <div class="team-groups" id="team-groups"></div>
+    </section>
+
+    <section class="team-callout">
+      <div class="callout-content">
+        <h2 data-i18n="calloutTitle">想要了解更多实验室动态？</h2>
+        <p data-i18n="calloutText">返回主页探索我们的研究方向、关键成果与开放职位，欢迎与我们展开合作。</p>
+        <a class="btn primary" href="index.html#team" data-i18n="calloutCTA">返回主页</a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-top">
+      <div>
+        <h3 data-i18n="footerContactTitle">联系我们</h3>
+        <ul class="contact-list">
+          <li><strong data-i18n="footerAddressLabel">地址：</strong><span data-i18n="footerAddressText">中国天津市津南区雅观路135号天津大学</span></li>
+          <li><strong data-i18n="footerEmailLabel">邮箱：</strong><span data-i18n="footerEmailText">xj.max.guo (at) gmail.com</span></li>
+        </ul>
+      </div>
+      <div>
+        <h3 data-i18n="footerLinksTitle">快速链接</h3>
+        <ul class="quick-links">
+          <li><a href="index.html#research" data-i18n="navResearch">研究方向</a></li>
+          <li><a href="team.html" data-i18n="navTeam">团队成员</a></li>
+          <li><a href="index.html#key-tech" data-i18n="navKeyTech">科研成果</a></li>
+          <li><a href="index.html#publications" data-i18n="navPublications">出版物</a></li>
+        </ul>
+      </div>
+      <div>
+        <h3 data-i18n="footerFollowTitle">关注我们</h3>
+        <ul class="social-links">
+          <li><a href="https://github.com/tjuxlab" target="_blank" rel="noopener" data-i18n="footerSocialGithub">GitHub</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p data-i18n="footerCopyright">©  2025 X-Lab · 版权所有 </p>
+    </div>
+  </footer>
+
+  <script>
+    const navToggle = document.querySelector('.nav-toggle');
+    const navMenu = document.querySelector('#nav-menu');
+    const langSwitch = document.querySelector('.lang-switch');
+    const langButtons = document.querySelectorAll('.lang-btn');
+    const i18nElements = document.querySelectorAll('[data-i18n]');
+    const i18nAttrElements = document.querySelectorAll('[data-i18n-attr]');
+    const teamContainer = document.querySelector('#team-groups');
+
+    const groupLabels = {
+      teacher: { zh: '教师团队', en: 'Teachers' },
+      phd: { zh: '博士研究生', en: 'PhD Candidates' },
+      master: { zh: '硕士研究生', en: 'Master Students' },
+      alumni: { zh: '毕业生', en: 'Alumni' }
+    };
+
+    const groupOrder = ['teacher', 'phd', 'master', 'alumni'];
+    let currentLang = 'zh';
+    let membersCache = [];
+
+    const zhTranslations = {
+      navAriaLabel: '主导航',
+      langSwitchLabel: '语言切换',
+      langChinese: '中文',
+      langEnglish: 'EN',
+      navHome: '首页',
+      navResearch: '研究方向',
+      navKeyTech: '科研成果',
+      navTeam: '团队成员',
+      navPublications: '出版物',
+      navJoin: '联系我们',
+      navContact: '联系方式',
+      heroEyebrow: 'X-Lab · 团队',
+      heroHeadline: '聚集优秀人才，驱动智能研究',
+      heroIntro: '团队覆盖计算机视觉方向，以开放协作的方式推动科研成果落地。',
+      teamHeading: '核心团队',
+      calloutTitle: '想要了解更多实验室动态？',
+      calloutText: '返回主页探索我们的研究方向、关键成果与开放职位，欢迎与我们展开合作。',
+      calloutCTA: '返回主页',
+      emptyMembers: '暂无团队成员。',
+      loadFailed: '成员数据加载失败，请稍后重试。',
+      footerContactTitle: '联系我们',
+      footerAddressLabel: '地址：',
+      footerAddressText: '中国天津市津南区雅观路135号天津大学',
+      footerPhoneLabel: '电话：',
+      footerPhoneText: '+86 10 1234 5678',
+      footerEmailLabel: '邮箱：',
+      footerEmailText: 'xj.max.guo (at) gmail.com',
+      footerLinksTitle: '快速链接',
+      footerFollowTitle: '关注我们',
+      footerSocialGithub: 'GitHub',
+      footerSocialLinkedIn: 'LinkedIn',
+      footerSocialTwitter: 'Twitter',
+      footerPartnersLabel: '合作伙伴：',
+      footerCopyright: '©  2025 X-Lab · 版权所有 '
+    };
+
+    const translations = {
+      zh: zhTranslations,
+      en: {
+        navAriaLabel: 'Main navigation',
+        langSwitchLabel: 'Language switch',
+        langChinese: '中文',
+        langEnglish: 'EN',
+        navHome: 'Home',
+        navResearch: 'Research',
+        navKeyTech: 'Key Achievements',
+        navTeam: 'Team',
+        navPublications: 'Publications',
+        navJoin: 'Contact Us',
+        navContact: 'Contact Us',
+        heroEyebrow: 'X-Lab · Team',
+        heroHeadline: 'Great minds driving intelligent research',
+        heroIntro: 'The team focuses on computer vision, collaborating openly to bring research into impact.',
+        teamHeading: 'Core Team',
+        calloutTitle: 'Want to learn more about the lab?',
+        calloutText: 'Head back to the homepage to explore our research focuses, achievements, and openings. We welcome collaboration.',
+        calloutCTA: 'Back to Home',
+        emptyMembers: 'No team members yet.',
+        loadFailed: 'Failed to load members. Please try again later.',
+        footerContactTitle: 'Contact Us',
+        footerAddressLabel: 'Address:',
+        footerAddressText: 'Tianjin University, 135 Yaguan Road, Jinnan District, Tianjin, China',
+        footerPhoneLabel: 'Phone:',
+        footerPhoneText: '+86 10 1234 5678',
+        footerEmailLabel: 'Email:',
+        footerEmailText: 'xj.max.guo (at) gmail.com',
+        footerLinksTitle: 'Quick Links',
+        footerFollowTitle: 'Follow Us',
+        footerSocialGithub: 'GitHub',
+        footerSocialLinkedIn: 'LinkedIn',
+        footerSocialTwitter: 'Twitter',
+        footerPartnersLabel: 'Partners:',
+        footerCopyright: '©  2025 X-Lab · All Rights Reserved'
+      }
+    };
+
+    const parseEnrollYear = (value) => {
+      if (value === undefined || value === null) return 0;
+      if (typeof value === 'number') return value;
+      const match = String(value).match(/(19|20)\d{2}/);
+      return match ? Number.parseInt(match[0], 10) : 0;
+    };
+
+    const getMemberYear = (member) => {
+      if (!member) return 0;
+      if ('enrollYear' in member) {
+        const direct = parseEnrollYear(member.enrollYear);
+        if (direct) return direct;
+      }
+      const zhYear = parseEnrollYear(member.roleZh);
+      if (zhYear) return zhYear;
+      const enYear = parseEnrollYear(member.roleEn);
+      if (enYear) return enYear;
+      return 0;
+    };
+
+    navToggle.addEventListener('click', () => {
+      const expanded = navToggle.getAttribute('aria-expanded') === 'true';
+      navToggle.setAttribute('aria-expanded', String(!expanded));
+      navMenu.classList.toggle('open');
+    });
+
+    window.addEventListener('scroll', () => {
+      const header = document.querySelector('.site-header');
+      if (window.scrollY > 40) {
+        header.classList.add('scrolled');
+      } else {
+        header.classList.remove('scrolled');
+      }
+    });
+
+    function updateLangButtons(activeLang) {
+      if (langSwitch) {
+        langSwitch.setAttribute('data-active-lang', activeLang);
+      }
+      langButtons.forEach((btn) => {
+        const lang = btn.dataset.lang || 'zh';
+        const isActive = lang === activeLang;
+        btn.classList.toggle('active', isActive);
+        btn.setAttribute('aria-pressed', String(isActive));
+      });
+    }
+
+    function applyLanguage(lang) {
+      const resolved = lang === 'en' ? 'en' : 'zh';
+      currentLang = resolved;
+      const dict = translations[resolved] || translations.zh;
+      document.body.setAttribute('data-lang', resolved);
+
+      i18nElements.forEach((el) => {
+        const key = el.dataset.i18n;
+        if (key && dict[key] !== undefined) {
+          el.innerHTML = dict[key];
+        }
+      });
+
+      i18nAttrElements.forEach((el) => {
+        const mappings = (el.dataset.i18nAttr || '').split(',');
+        mappings.forEach((mapping) => {
+          const [attr, key] = mapping.split(':').map((item) => item.trim());
+          if (attr && key && dict[key] !== undefined) {
+            el.setAttribute(attr, dict[key]);
+          }
+        });
+      });
+
+      document.documentElement.lang = resolved === 'en' ? 'en' : 'zh-CN';
+      renderMembers(membersCache);
+    }
+
+    const escapeHtml = (value = '') => String(value)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
+
+    const linkify = (text = '') => escapeHtml(text).replace(/(https?:\/\/[^\s]+)/g, '<a class="link" href="$1" target="_blank" rel="noopener">$1</a>');
+
+    function renderMembers(members) {
+      if (!teamContainer) return;
+
+      if (!members.length) {
+        teamContainer.innerHTML = `<div class="section-empty">${translations[currentLang].emptyMembers}</div>`;
+        return;
+      }
+
+      const grouped = members.reduce((acc, member) => {
+        const key = member.group || 'teacher';
+        if (!acc[key]) acc[key] = [];
+        acc[key].push(member);
+        return acc;
+      }, {});
+
+      const content = groupOrder.map((key) => {
+        const list = grouped[key];
+        if (!list || !list.length) return '';
+        const sectionTitle = groupLabels[key]?.[currentLang] || key;
+        const sortedList = [...list].sort((a, b) => getMemberYear(b) - getMemberYear(a));
+        const cards = sortedList.map((member) => {
+          const name = currentLang === 'en'
+            ? (member.nameEn || member.nameZh || '')
+            : (member.nameZh || member.nameEn || '');
+          const rawEnroll = currentLang === 'en'
+            ? (member.roleEn || member.roleZh || '')
+            : (member.roleZh || member.roleEn || '');
+          const bio = currentLang === 'en'
+            ? (member.bioEn || member.bioZh || '')
+            : (member.bioZh || member.bioEn || '');
+          const links = Array.isArray(member.links)
+            ? member.links.map((link) =>
+                `<a class="link" href="${link.url}" target="_blank" rel="noopener">${link.label || 'Link'}</a>`
+              ).join('')
+            : '';
+
+          const initialSource = name || role || (currentLang === 'zh' ? '研' : 'F');
+          const initial = String(initialSource).trim().charAt(0) || '';
+          const photo = member.avatar
+            ? `<img src="${member.avatar}" alt="${name}">`
+            : `<span class="team-initial">${initial}</span>`;
+          return `
+            <article class="team-profile">
+              <div class="team-photo">${photo}</div>
+              <div class="team-info">
+                <h4>${name}</h4>
+                <p class="role">${rawEnroll ? (currentLang === 'zh' ? `${rawEnroll}` : `${rawEnroll}`) : ''}</p>
+                ${bio ? `<p class="bio">${linkify(bio)}</p>` : ''}
+                <div class="team-links">
+                  ${links}
+                </div>
+              </div>
+            </article>
+          `;
+        }).join('');
+
+        return `
+          <section class="team-group">
+            <h3>${sectionTitle}</h3>
+            <div class="team-profiles">
+              ${cards}
+            </div>
+          </section>
+        `;
+      }).filter(Boolean).join('');
+
+      teamContainer.innerHTML = content || `<div class="section-empty">${translations[currentLang].emptyMembers}</div>`;
+    }
+
+    async function loadMembers() {
+      if (!teamContainer) return;
+      try {
+        const response = await fetch('data/members.json');
+        if (!response.ok) {
+          throw new Error('Failed to load members');
+        }
+        membersCache = await response.json();
+        renderMembers(membersCache);
+      } catch (error) {
+        console.error(error);
+        teamContainer.innerHTML = `<div class="section-empty">${translations[currentLang].loadFailed}</div>`;
+      }
+    }
+
+    langButtons.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const targetLang = btn.dataset.lang || 'zh';
+        applyLanguage(targetLang);
+        updateLangButtons(targetLang);
+      });
+    });
+
+    applyLanguage('zh');
+    updateLangButtons('zh');
+    loadMembers();
+  </script>
+</body>
+</html>
+

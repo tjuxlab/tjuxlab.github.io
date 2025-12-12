@@ -1,0 +1,1224 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>X-Lab · 后台管理</title>
+  <style>
+    :root {
+      font-family: "Segoe UI", "Noto Sans SC", "Microsoft YaHei", Arial, sans-serif;
+      color: #1f2937;
+      background: #f5f6fa;
+    }
+    body {
+      margin: 0;
+      padding: 32px;
+    }
+    .header-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+    }
+    h1 {
+      margin: 0;
+      font-size: 28px;
+      font-weight: 700;
+    }
+    .logout-btn {
+      padding: 10px 20px;
+      border-radius: 8px;
+      border: none;
+      background: #dc2626;
+      color: #ffffff;
+      font-size: 14px;
+      cursor: pointer;
+      transition: background 0.2s ease;
+    }
+    .logout-btn:hover {
+      background: #b91c1c;
+    }
+    section {
+      background: #ffffff;
+      border-radius: 16px;
+      padding: 24px;
+      margin-bottom: 32px;
+      box-shadow: 0 14px 30px rgba(15, 23, 42, 0.1);
+    }
+    section > h2 {
+      margin: 0 0 16px;
+      font-size: 20px;
+      font-weight: 600;
+    }
+    .section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin: 0 0 16px;
+    }
+    .section-header h2 {
+      margin: 0;
+      font-size: 20px;
+      font-weight: 600;
+    }
+    .collapse-btn {
+      padding: 6px 14px;
+      border-radius: 999px;
+      border: 1px solid #d2d6dc;
+      background: rgba(229, 231, 235, 0.5);
+      color: #1f2937;
+      font-size: 13px;
+      cursor: pointer;
+      transition: background 0.2s ease, transform 0.2s ease;
+    }
+    .collapse-btn:hover {
+      background: rgba(209, 213, 219, 0.8);
+      transform: translateY(-1px);
+    }
+    .collapsible.collapsed > :not(.section-header) {
+      display: none;
+    }
+    form {
+      display: grid;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+    label {
+      display: grid;
+      gap: 6px;
+      font-size: 14px;
+      color: #475569;
+    }
+    input,
+    textarea,
+    select {
+      border: 1px solid #d2d6dc;
+      border-radius: 8px;
+      padding: 10px 12px;
+      font-size: 14px;
+      font-family: inherit;
+    }
+    textarea {
+      resize: vertical;
+    }
+    button {
+      justify-self: flex-start;
+      padding: 10px 18px;
+      border-radius: 8px;
+      border: none;
+      background: #2563eb;
+      color: #ffffff;
+      font-size: 14px;
+      cursor: pointer;
+      transition: background 0.2s ease;
+    }
+    button:hover {
+      background: #1d4ed8;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 12px;
+      font-size: 14px;
+      background: #ffffff;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 6px 18px rgba(15, 23, 42, 0.08);
+    }
+    th,
+    td {
+      padding: 10px 12px;
+      border-bottom: 1px solid #e5e7eb;
+      text-align: left;
+      vertical-align: top;
+      word-break: break-word;
+    }
+    th {
+      background: #f1f5f9;
+      color: #111827;
+      font-weight: 600;
+    }
+    td button {
+      margin-right: 8px;
+      padding: 6px 10px;
+      font-size: 12px;
+    }
+    .danger {
+      background: #ef4444;
+    }
+    .danger:hover {
+      background: #dc2626;
+    }
+    .empty {
+      padding: 16px;
+      border: 1px dashed #cbd5f5;
+      border-radius: 10px;
+      color: #64748b;
+      background: #f8fafc;
+    }
+    @media (max-width: 720px) {
+      body {
+        padding: 20px;
+      }
+      section {
+        padding: 20px;
+      }
+      table {
+        display: block;
+        overflow-x: auto;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="header-bar">
+    <h1>X-Lab · 后台管理</h1>
+    <button class="logout-btn" onclick="handleLogout()">退出登录</button>
+  </div>
+
+  <section id="slides-section" class="collapsible collapsed">
+    <div class="section-header">
+      <h2>首页横幅</h2>
+      <button type="button" class="collapse-btn" data-target="slides-section" aria-expanded="false">展开</button>
+    </div>
+    <form id="slide-form">
+      <input type="hidden" id="slide-id">
+      <label>
+        媒体路径（相对于 public/）
+        <input id="slide-media" placeholder="image/banner.jpg" required>
+      </label>
+      <label>
+        媒体类型
+        <select id="slide-media-type">
+          <option value="image">image</option>
+          <option value="video">video</option>
+        </select>
+      </label>
+      <label>
+        跳转链接（可选）
+        <input id="slide-link" placeholder="https://example.com">
+      </label>
+      <fieldset class="subimage-fieldset">
+        <legend>子图（图中图展示，最多三张）</legend>
+        <div class="subimage-group">
+          <strong>子图 1</strong>
+          <label>图片路径
+            <input id="slide-sub1-image" placeholder="image/sub1.png">
+          </label>
+          <label>跳转链接
+            <input id="slide-sub1-link" placeholder="https://example.com">
+          </label>
+          <label>文字（中文）
+            <input id="slide-sub1-label-zh">
+          </label>
+          <label>Text (English)
+            <input id="slide-sub1-label-en">
+          </label>
+        </div>
+        <div class="subimage-group">
+          <strong>子图 2</strong>
+          <label>图片路径
+            <input id="slide-sub2-image" placeholder="image/sub2.png">
+          </label>
+          <label>跳转链接
+            <input id="slide-sub2-link" placeholder="https://example.com">
+          </label>
+          <label>文字（中文）
+            <input id="slide-sub2-label-zh">
+          </label>
+          <label>Text (English)
+            <input id="slide-sub2-label-en">
+          </label>
+        </div>
+        <div class="subimage-group">
+          <strong>子图 3</strong>
+          <label>图片路径
+            <input id="slide-sub3-image" placeholder="image/sub3.png">
+          </label>
+          <label>跳转链接
+            <input id="slide-sub3-link" placeholder="https://example.com">
+          </label>
+          <label>文字（中文）
+            <input id="slide-sub3-label-zh">
+          </label>
+          <label>Text (English)
+            <input id="slide-sub3-label-en">
+          </label>
+        </div>
+        <div class="subimage-group">
+          <strong>子图 4</strong>
+          <label>图片路径
+            <input id="slide-sub4-image" placeholder="image/sub4.png">
+          </label>
+          <label>跳转链接
+            <input id="slide-sub4-link" placeholder="https://example.com">
+          </label>
+          <label>文字（中文）
+            <input id="slide-sub4-label-zh">
+          </label>
+          <label>Text (English)
+            <input id="slide-sub4-label-en">
+          </label>
+        </div>
+        <div class="subimage-group">
+          <strong>子图 5</strong>
+          <label>图片路径
+            <input id="slide-sub5-image" placeholder="image/sub5.png">
+          </label>
+          <label>跳转链接
+            <input id="slide-sub5-link" placeholder="https://example.com">
+          </label>
+          <label>文字（中文）
+            <input id="slide-sub5-label-zh">
+          </label>
+          <label>Text (English)
+            <input id="slide-sub5-label-en">
+          </label>
+        </div>
+      </fieldset>
+      <button type="submit">保存横幅</button>
+    </form>
+    <div id="slides-table-wrapper" class="empty">正在加载横幅列表…</div>
+  </section>
+
+  <section id="image-wall-section" class="collapsible collapsed">
+    <div class="section-header">
+      <h2>研究图片走马灯</h2>
+      <button type="button" class="collapse-btn" data-target="image-wall-section" aria-expanded="false">展开</button>
+    </div>
+    <form id="image-wall-form">
+      <input type="hidden" id="image-wall-id">
+      <label>标题（鼠标悬浮时显示，可选）
+        <input id="image-wall-title" placeholder="X-Lab · Vision Restoration">
+      </label>
+      <label>Title (English, optional)
+        <input id="image-wall-title-en" placeholder="Vision Restoration">
+      </label>
+      <label>图片路径
+        <input id="image-wall-image" placeholder="image/wall/sample.jpg" required>
+      </label>
+      <label>跳转链接（可选）
+        <input id="image-wall-link" placeholder="https://example.com/detail">
+      </label>
+      <button type="submit">保存图片</button>
+    </form>
+    <div id="image-wall-table-wrapper" class="empty">正在加载图片墙…</div>
+  </section>
+
+  <section id="members-section" class="collapsible collapsed">
+    <div class="section-header">
+      <h2>团队成员</h2>
+      <button type="button" class="collapse-btn" data-target="members-section" aria-expanded="false">展开</button>
+    </div>
+    <form id="member-form">
+      <input type="hidden" id="member-id">
+      <label>姓名（中文）
+        <input id="member-name-zh" required>
+      </label>
+      <label>Name (English)
+        <input id="member-name-en" required>
+      </label>
+      <label>入学年份（中文）
+        <input id="member-role-zh" required>
+      </label>
+      <label>Enrollment Year (English)
+        <input id="member-role-en" required>
+      </label>
+      <label>简介（中文，最多三行）
+        <textarea id="member-bio-zh" rows="3"></textarea>
+      </label>
+      <label>Bio (English, up to three lines)
+        <textarea id="member-bio-en" rows="3"></textarea>
+      </label>
+      <label>所属分类
+        <select id="member-group">
+          <option value="teacher">教师 Teacher</option>
+          <option value="phd">博士研究生 PhD</option>
+          <option value="master">硕士研究生 Master</option>
+          <option value="alumni">毕业生 Alumni</option>
+        </select>
+      </label>
+      <label>头像文件名（可选）
+        <input id="member-avatar" placeholder="avatar.png">
+      </label>
+      <button type="submit">保存成员</button>
+    </form>
+    <div id="member-table-wrapper" class="empty">正在加载团队成员…</div>
+  </section>
+
+  <section id="key-tech-section" class="collapsible collapsed">
+    <div class="section-header">
+      <h2>关键技术</h2>
+      <button type="button" class="collapse-btn" data-target="key-tech-section" aria-expanded="false">展开</button>
+    </div>
+    <form id="tech-form">
+      <input type="hidden" id="tech-id">
+      <label>标签（中文）
+        <input id="tech-tag-zh">
+      </label>
+      <label>Tag (English)
+        <input id="tech-tag-en">
+      </label>
+      <label>标题（中文）
+        <input id="tech-title-zh" required>
+      </label>
+      <label>Title (English)
+        <input id="tech-title-en" required>
+      </label>
+      <label>描述（中文）
+        <textarea id="tech-desc-zh" rows="3"></textarea>
+      </label>
+      <label>Description (English)
+        <textarea id="tech-desc-en" rows="3"></textarea>
+      </label>
+      <label>媒体路径（支持图片 / GIF / 视频）
+        <input id="tech-media" placeholder="image/key-tech.png" required>
+      </label>
+      <label>媒体类型
+        <select id="tech-media-type">
+          <option value="image">image / gif</option>
+          <option value="video">video</option>
+        </select>
+      </label>
+      <label>替代文字（中文，可选）
+        <input id="tech-alt-zh">
+      </label>
+      <label>Alt text (English, optional)
+        <input id="tech-alt-en">
+      </label>
+      <label>跳转链接（可选）
+        <input id="tech-link" placeholder="https://example.com">
+      </label>
+      <label>链接文字（中文，可选）
+        <input id="tech-link-label-zh">
+      </label>
+      <label>Link label (English, optional)
+        <input id="tech-link-label-en">
+      </label>
+      <button type="submit">保存关键技术</button>
+    </form>
+    <div id="tech-table-wrapper" class="empty">正在加载关键技术…</div>
+  </section>
+
+  <section id="publications-section" class="collapsible collapsed">
+    <div class="section-header">
+      <h2>出版物</h2>
+      <button type="button" class="collapse-btn" data-target="publications-section" aria-expanded="false">展开</button>
+    </div>
+    <form id="pub-form">
+      <input type="hidden" id="pub-id">
+      <label>标题（中文）
+        <input id="pub-title-zh" required>
+      </label>
+      <label>Title (English)
+        <input id="pub-title-en" required>
+      </label>
+      <label>会议 / 期刊（中文）
+        <input id="pub-venue-zh" required>
+      </label>
+      <label>Venue (English)
+        <input id="pub-venue-en" required>
+      </label>
+      <label>年份
+        <input id="pub-year" type="number" min="1990" max="2100" step="1" placeholder="2025" required>
+      </label>
+      <label>作者
+        <input id="pub-authors">
+      </label>
+      <label>摘要（中文）
+        <textarea id="pub-summary-zh" rows="3"></textarea>
+      </label>
+      <label>Summary (English)
+        <textarea id="pub-summary-en" rows="3"></textarea>
+      </label>
+      <label>Paper 链接
+        <input id="pub-paper" placeholder="https://example.com/paper.pdf">
+      </label>
+      <label>Code 链接
+        <input id="pub-code" placeholder="https://github.com/xxx">
+      </label>
+      <label>所属研究方向
+        <select id="pub-research">
+          <option value="">未关联</option>
+        </select>
+      </label>
+      <button type="submit">保存出版物</button>
+    </form>
+    <div id="pub-table-wrapper" class="empty">正在加载出版物…</div>
+  </section>
+
+  <section id="partners-section" class="collapsible collapsed">
+    <div class="section-header">
+      <h2>合作伙伴</h2>
+      <button type="button" class="collapse-btn" data-target="partners-section" aria-expanded="false">展开</button>
+    </div>
+    <form id="partner-form">
+      <input type="hidden" id="partner-id">
+      <label>名称（中文）
+        <input id="partner-name-zh" required>
+      </label>
+      <label>Name (English)
+        <input id="partner-name-en" required>
+      </label>
+      <label>图片路径（建议 200×200）
+        <input id="partner-image" placeholder="image/partners/logo.png" required>
+      </label>
+      <label>跳转链接
+        <input id="partner-link" placeholder="https://example.com" required>
+      </label>
+      <label>替代文字（中文，可选）
+        <input id="partner-alt-zh">
+      </label>
+      <label>Alt text (English, optional)
+        <input id="partner-alt-en">
+      </label>
+      <button type="submit">保存合作伙伴</button>
+    </form>
+    <div id="partner-table-wrapper" class="empty">正在加载合作伙伴…</div>
+  </section>
+
+  <script>
+    (() => {
+      const getEl = (id) => document.getElementById(id);
+      const escapeHtml = (value) => {
+        if (value === null || value === undefined) return '';
+        return String(value).replace(/[&<>"']/g, (char) => ({
+          '&': '&amp;',
+          '<': '&lt;',
+          '>': '&gt;',
+          '"': '&quot;',
+          "'": '&#39;',
+        })[char]);
+      };
+      const formatCell = (primary, secondary) => {
+        const p = escapeHtml(primary);
+        const s = escapeHtml(secondary);
+        if (!s) return p;
+        return `${p}<br><small>${s}</small>`;
+      };
+      const setEmpty = (wrapper, message) => {
+        wrapper.className = 'empty';
+        wrapper.textContent = message;
+      };
+      const renderTable = (wrapper, headers, rowsHtml) => {
+        if (!rowsHtml) {
+          setEmpty(wrapper, '暂无数据');
+          return;
+        }
+        wrapper.className = '';
+        wrapper.innerHTML = `
+          <table>
+            <thead>
+              <tr>${headers.map((label) => `<th>${label}</th>`).join('')}</tr>
+            </thead>
+            <tbody>${rowsHtml}</tbody>
+          </table>
+        `;
+      };
+      const fetchJson = async (url, label) => {
+        const res = await fetch(url, { credentials: 'include' });
+        if (!res.ok) {
+          if (res.status === 401) {
+            alert('会话已过期，请重新登录');
+            window.location.href = '/login.html';
+            return;
+          }
+          const text = await res.text().catch(() => '');
+          throw new Error(`${label}失败：${res.status} ${text}`);
+        }
+        return res.json();
+      };
+    const handleRequest = async (url, options, label) => {
+      const res = await fetch(url, { ...options, credentials: 'include' });
+      if (!res.ok) {
+        if (res.status === 401) {
+          alert('会话已过期，请重新登录');
+          window.location.href = '/login.html';
+          return;
+        }
+        const text = await res.text().catch(() => '');
+        throw new Error(`${label}失败：${res.status} ${text}`);
+      }
+      return res.status === 204 ? null : res.json();
+    };
+
+    const loadResearchOptions = async () => {
+      try {
+        const data = await fetchJson('/api/research', '加载研究方向');
+        researchList = Array.isArray(data) ? data : [];
+      } catch (error) {
+        researchList = [];
+      }
+      if (pubResearchSelect) {
+        const defaultOption = '<option value="">未关联</option>';
+        const options = researchList
+          .sort((a, b) => (a.order ?? 0) - (b.order ?? 0))
+          .map((item) => `<option value="${escapeHtml(item.id)}">${escapeHtml(item.titleZh || item.titleEn || item.id)}</option>`)
+          .join('');
+        pubResearchSelect.innerHTML = defaultOption + options;
+      }
+    };
+
+    const getResearchLabel = (id) => {
+      if (!id) return '';
+      const found = researchList.find((item) => item.id === id);
+      if (!found) return '';
+      return found.titleZh || found.titleEn || id;
+    };
+
+    // Logout function
+    const handleLogout = async () => {
+      if (!confirm('确定要退出登录吗？')) return;
+      
+      try {
+        await fetch('/api/auth/logout', {
+          method: 'POST',
+          credentials: 'include'
+        });
+        window.location.href = '/login.html';
+      } catch (error) {
+        alert('登出失败，请重试');
+      }
+    };
+    window.handleLogout = handleLogout;
+    
+    // Check auth status on load
+    const checkAuth = async () => {
+      try {
+        const res = await fetch('/api/auth/status', { credentials: 'include' });
+        const data = await res.json();
+        if (!data.authenticated) {
+          window.location.href = '/login.html';
+        }
+      } catch (error) {
+        window.location.href = '/login.html';
+      }
+    };
+
+    const initCollapsibleSections = () => {
+      document.querySelectorAll('.collapse-btn').forEach((btn) => {
+        const targetId = btn.dataset.target;
+        if (!targetId) return;
+        const section = document.getElementById(targetId);
+        if (!section) return;
+
+        const updateButton = () => {
+          const collapsed = section.classList.contains('collapsed');
+          btn.textContent = collapsed ? '展开' : '收起';
+          btn.setAttribute('aria-expanded', String(!collapsed));
+        };
+
+        btn.addEventListener('click', () => {
+          section.classList.toggle('collapsed');
+          updateButton();
+        });
+
+        updateButton();
+      });
+    };
+
+      const slideForm = getEl('slide-form');
+      const slidesWrapper = getEl('slides-table-wrapper');
+      const subImageInputs = [1, 2, 3, 4, 5].map((index) => ({
+        image: getEl(`slide-sub${index}-image`),
+        link: getEl(`slide-sub${index}-link`),
+        labelZh: getEl(`slide-sub${index}-label-zh`),
+        labelEn: getEl(`slide-sub${index}-label-en`),
+      }));
+
+      const collectSubImages = () => subImageInputs
+        .map((field) => {
+          const src = field.image?.value?.trim();
+          if (!src) return null;
+          return {
+            src,
+            link: field.link?.value?.trim() || '',
+            labelZh: field.labelZh?.value || '',
+            labelEn: field.labelEn?.value || '',
+          };
+        })
+        .filter(Boolean);
+
+      const populateSubImages = (subImages = []) => {
+        subImageInputs.forEach((field, idx) => {
+          const data = subImages[idx];
+          if (!field.image) return;
+          field.image.value = data?.src || '';
+          field.link.value = data?.link || '';
+          field.labelZh.value = data?.labelZh || '';
+          field.labelEn.value = data?.labelEn || '';
+        });
+      };
+      const imageWallForm = getEl('image-wall-form');
+      const imageWallWrapper = getEl('image-wall-table-wrapper');
+      const techForm = getEl('tech-form');
+      const techWrapper = getEl('tech-table-wrapper');
+      const partnerForm = getEl('partner-form');
+      const partnerWrapper = getEl('partner-table-wrapper');
+      const memberForm = getEl('member-form');
+      const memberWrapper = getEl('member-table-wrapper');
+      const pubForm = getEl('pub-form');
+      const pubWrapper = getEl('pub-table-wrapper');
+      const pubResearchSelect = getEl('pub-research');
+      let researchList = [];
+
+      const loadSlides = async () => {
+        setEmpty(slidesWrapper, '正在加载横幅列表…');
+        try {
+          const data = await fetchJson('/api/slides', '加载横幅');
+          const rows = Array.isArray(data) ? data.map((item) => `
+            <tr>
+              <td>${formatCell(item.tagZh, item.tagEn)}</td>
+              <td>${formatCell(item.titleZh, item.titleEn)}</td>
+              <td>${escapeHtml(item.media || '')}<br><small>${escapeHtml(item.mediaType || '')}</small></td>
+              <td>${escapeHtml(item.link || '')}</td>
+              <td>
+                <button data-type="slide" data-action="edit" data-id="${escapeHtml(item.id)}">编辑</button>
+                <button class="danger" data-type="slide" data-action="delete" data-id="${escapeHtml(item.id)}">删除</button>
+              </td>
+            </tr>
+          `).join('') : '';
+          renderTable(slidesWrapper, ['标签', '标题', '媒体', '链接', '操作'], rows);
+        } catch (error) {
+          setEmpty(slidesWrapper, error.message || '加载失败，请检查服务器日志。');
+        }
+      };
+
+      slideForm.addEventListener('submit', async (event) => {
+        event.preventDefault();
+      const payload = {
+        media: getEl('slide-media').value,
+        mediaType: getEl('slide-media-type').value,
+        link: getEl('slide-link').value,
+        subImages: collectSubImages(),
+      };
+        const id = getEl('slide-id').value;
+        try {
+          if (id) {
+            await handleRequest(`/api/slides/${id}`, {
+              method: 'PUT',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(payload),
+            }, '更新横幅');
+          } else {
+            await handleRequest('/api/slides', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(payload),
+            }, '新增横幅');
+          }
+          slideForm.reset();
+          populateSubImages([]);
+          await loadSlides();
+        } catch (error) {
+          alert(error.message);
+        }
+      });
+
+      slidesWrapper.addEventListener('click', async (event) => {
+        const btn = event.target.closest('button[data-type="slide"]');
+        if (!btn) return;
+        const { action, id } = btn.dataset;
+        if (!id) return;
+        if (action === 'edit') {
+          try {
+            const data = await fetchJson('/api/slides', '加载横幅');
+            const item = Array.isArray(data) ? data.find((entry) => entry.id === id) : null;
+            if (!item) return;
+            getEl('slide-id').value = item.id;
+        getEl('slide-media').value = item.media || '';
+            getEl('slide-media-type').value = (item.mediaType || 'image').toLowerCase();
+            getEl('slide-link').value = item.link || '';
+            populateSubImages(item.subImages || []);
+          } catch (error) {
+            alert(error.message);
+          }
+          return;
+        }
+        if (action === 'delete' && confirm('确定删除该横幅吗？')) {
+          try {
+            await handleRequest(`/api/slides/${id}`, { method: 'DELETE' }, '删除横幅');
+            await loadSlides();
+          } catch (error) {
+            alert(error.message);
+          }
+        }
+      });
+
+      const loadImageWallItems = async () => {
+        if (!imageWallWrapper) return;
+        setEmpty(imageWallWrapper, '正在加载图片墙…');
+        try {
+          const data = await fetchJson('/api/image-wall', '加载图片墙');
+          const rows = Array.isArray(data) ? data.map((item) => `
+            <tr>
+              <td>${formatCell(item.title, item.titleEn)}</td>
+              <td>${escapeHtml(item.image || '')}</td>
+              <td>${escapeHtml(item.link || '')}</td>
+              <td>
+                <button data-type="image-wall" data-action="edit" data-id="${escapeHtml(item.id)}">编辑</button>
+                <button class="danger" data-type="image-wall" data-action="delete" data-id="${escapeHtml(item.id)}">删除</button>
+              </td>
+            </tr>
+          `).join('') : '';
+          renderTable(imageWallWrapper, ['标题', '图片', '链接', '操作'], rows);
+        } catch (error) {
+          setEmpty(imageWallWrapper, error.message || '加载失败，请检查服务器日志。');
+        }
+      };
+
+      imageWallForm.addEventListener('submit', async (event) => {
+        event.preventDefault();
+        const payload = {
+          title: getEl('image-wall-title').value,
+          titleEn: getEl('image-wall-title-en').value,
+          image: getEl('image-wall-image').value,
+          link: getEl('image-wall-link').value,
+        };
+        const id = getEl('image-wall-id').value;
+        try {
+          if (id) {
+            await handleRequest(`/api/image-wall/${id}`, {
+              method: 'PUT',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(payload),
+            }, '更新图片墙');
+          } else {
+            await handleRequest('/api/image-wall', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(payload),
+            }, '新增图片墙');
+          }
+          imageWallForm.reset();
+          await loadImageWallItems();
+        } catch (error) {
+          alert(error.message);
+        }
+      });
+
+      imageWallWrapper.addEventListener('click', async (event) => {
+        const btn = event.target.closest('button[data-type="image-wall"]');
+        if (!btn) return;
+        const { action, id } = btn.dataset;
+        if (!id) return;
+        if (action === 'edit') {
+          try {
+            const data = await fetchJson('/api/image-wall', '加载图片墙');
+            const item = Array.isArray(data) ? data.find((entry) => entry.id === id) : null;
+            if (!item) return;
+            getEl('image-wall-id').value = item.id;
+            getEl('image-wall-title').value = item.title || '';
+            getEl('image-wall-title-en').value = item.titleEn || '';
+            getEl('image-wall-image').value = item.image || '';
+            getEl('image-wall-link').value = item.link || '';
+          } catch (error) {
+            alert(error.message);
+          }
+          return;
+        }
+        if (action === 'delete' && confirm('确定删除该图片吗？')) {
+          try {
+            await handleRequest(`/api/image-wall/${id}`, { method: 'DELETE' }, '删除图片');
+            await loadImageWallItems();
+          } catch (error) {
+            alert(error.message);
+          }
+        }
+      });
+
+      const loadKeyTech = async () => {
+        setEmpty(techWrapper, '正在加载关键技术…');
+        try {
+          const data = await fetchJson('/api/key-tech', '加载关键技术');
+          const rows = Array.isArray(data) ? data.map((item) => `
+            <tr>
+              <td>${formatCell(item.tagZh, item.tagEn)}</td>
+              <td>${formatCell(item.titleZh, item.titleEn)}</td>
+              <td>${escapeHtml(item.media || '')}<br><small>${escapeHtml(item.mediaType || '')}</small></td>
+              <td>${escapeHtml(item.link || '')}</td>
+              <td>
+                <button data-type="tech" data-action="edit" data-id="${escapeHtml(item.id)}">编辑</button>
+                <button class="danger" data-type="tech" data-action="delete" data-id="${escapeHtml(item.id)}">删除</button>
+              </td>
+            </tr>
+          `).join('') : '';
+          renderTable(techWrapper, ['标签', '标题', '媒体', '链接', '操作'], rows);
+        } catch (error) {
+          setEmpty(techWrapper, error.message || '加载失败，请检查服务器日志。');
+        }
+      };
+
+      techForm.addEventListener('submit', async (event) => {
+        event.preventDefault();
+        const payload = {
+          tagZh: getEl('tech-tag-zh').value,
+          tagEn: getEl('tech-tag-en').value,
+          titleZh: getEl('tech-title-zh').value,
+          titleEn: getEl('tech-title-en').value,
+          descriptionZh: getEl('tech-desc-zh').value,
+          descriptionEn: getEl('tech-desc-en').value,
+          media: getEl('tech-media').value,
+          mediaType: getEl('tech-media-type').value,
+          altZh: getEl('tech-alt-zh').value,
+          altEn: getEl('tech-alt-en').value,
+          link: getEl('tech-link').value,
+          linkLabelZh: getEl('tech-link-label-zh').value,
+          linkLabelEn: getEl('tech-link-label-en').value,
+        };
+        const id = getEl('tech-id').value;
+        try {
+          if (id) {
+            await handleRequest(`/api/key-tech/${id}`, {
+              method: 'PUT',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(payload),
+            }, '更新关键技术');
+          } else {
+            await handleRequest('/api/key-tech', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(payload),
+            }, '新增关键技术');
+          }
+          techForm.reset();
+          await loadKeyTech();
+        } catch (error) {
+          alert(error.message);
+        }
+      });
+
+      techWrapper.addEventListener('click', async (event) => {
+        const btn = event.target.closest('button[data-type="tech"]');
+        if (!btn) return;
+        const { action, id } = btn.dataset;
+        if (!id) return;
+        if (action === 'edit') {
+          try {
+            const data = await fetchJson('/api/key-tech', '加载关键技术');
+            const item = Array.isArray(data) ? data.find((entry) => entry.id === id) : null;
+            if (!item) return;
+            getEl('tech-id').value = item.id;
+            getEl('tech-tag-zh').value = item.tagZh || '';
+            getEl('tech-tag-en').value = item.tagEn || '';
+            getEl('tech-title-zh').value = item.titleZh || '';
+            getEl('tech-title-en').value = item.titleEn || '';
+            getEl('tech-desc-zh').value = item.descriptionZh || '';
+            getEl('tech-desc-en').value = item.descriptionEn || '';
+            getEl('tech-media').value = item.media || '';
+            getEl('tech-media-type').value = (item.mediaType || 'image').toLowerCase();
+            getEl('tech-alt-zh').value = item.altZh || '';
+            getEl('tech-alt-en').value = item.altEn || '';
+            getEl('tech-link').value = item.link || '';
+            getEl('tech-link-label-zh').value = item.linkLabelZh || '';
+            getEl('tech-link-label-en').value = item.linkLabelEn || '';
+          } catch (error) {
+            alert(error.message);
+          }
+          return;
+        }
+        if (action === 'delete' && confirm('确定删除该关键技术条目吗？')) {
+          try {
+            await handleRequest(`/api/key-tech/${id}`, { method: 'DELETE' }, '删除关键技术');
+            await loadKeyTech();
+          } catch (error) {
+            alert(error.message);
+          }
+        }
+      });
+
+      const loadPartners = async () => {
+        setEmpty(partnerWrapper, '正在加载合作伙伴…');
+        try {
+          const data = await fetchJson('/api/partners', '加载合作伙伴');
+          const rows = Array.isArray(data) ? data.map((item) => `
+            <tr>
+              <td>${formatCell(item.nameZh, item.nameEn)}</td>
+              <td>${escapeHtml(item.image || '')}</td>
+              <td>${escapeHtml(item.link || '')}</td>
+              <td>
+                <button data-type="partner" data-action="edit" data-id="${escapeHtml(item.id)}">编辑</button>
+                <button class="danger" data-type="partner" data-action="delete" data-id="${escapeHtml(item.id)}">删除</button>
+              </td>
+            </tr>
+          `).join('') : '';
+          renderTable(partnerWrapper, ['名称', '图片', '链接', '操作'], rows);
+        } catch (error) {
+          setEmpty(partnerWrapper, error.message || '加载失败，请检查服务器日志。');
+        }
+      };
+
+      partnerForm.addEventListener('submit', async (event) => {
+        event.preventDefault();
+        const payload = {
+          nameZh: getEl('partner-name-zh').value,
+          nameEn: getEl('partner-name-en').value,
+          image: getEl('partner-image').value,
+          link: getEl('partner-link').value,
+          altZh: getEl('partner-alt-zh').value,
+          altEn: getEl('partner-alt-en').value,
+        };
+        const id = getEl('partner-id').value;
+        try {
+          if (id) {
+            await handleRequest(`/api/partners/${id}`, {
+              method: 'PUT',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(payload),
+            }, '更新合作伙伴');
+          } else {
+            await handleRequest('/api/partners', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(payload),
+            }, '新增合作伙伴');
+          }
+          partnerForm.reset();
+          await loadPartners();
+        } catch (error) {
+          alert(error.message);
+        }
+      });
+
+      partnerWrapper.addEventListener('click', async (event) => {
+        const btn = event.target.closest('button[data-type="partner"]');
+        if (!btn) return;
+        const { action, id } = btn.dataset;
+        if (!id) return;
+        if (action === 'edit') {
+          try {
+            const data = await fetchJson('/api/partners', '加载合作伙伴');
+            const item = Array.isArray(data) ? data.find((entry) => entry.id === id) : null;
+            if (!item) return;
+            getEl('partner-id').value = item.id;
+            getEl('partner-name-zh').value = item.nameZh || '';
+            getEl('partner-name-en').value = item.nameEn || '';
+            getEl('partner-image').value = item.image || '';
+            getEl('partner-link').value = item.link || '';
+            getEl('partner-alt-zh').value = item.altZh || '';
+            getEl('partner-alt-en').value = item.altEn || '';
+          } catch (error) {
+            alert(error.message);
+          }
+          return;
+        }
+        if (action === 'delete' && confirm('确定删除该合作伙伴吗？')) {
+          try {
+            await handleRequest(`/api/partners/${id}`, { method: 'DELETE' }, '删除合作伙伴');
+            await loadPartners();
+          } catch (error) {
+            alert(error.message);
+          }
+        }
+      });
+
+      const loadMembers = async () => {
+        setEmpty(memberWrapper, '正在加载团队成员…');
+        try {
+          const data = await fetchJson('/api/members', '加载团队成员');
+          const rows = Array.isArray(data) ? data.map((item) => `
+            <tr>
+              <td>${formatCell(item.nameZh, item.nameEn)}</td>
+              <td>${formatCell(item.roleZh, item.roleEn)}</td>
+              <td>${escapeHtml(item.group || '')}</td>
+              <td>${escapeHtml(item.bioZh || '')}<br><small>${escapeHtml(item.bioEn || '')}</small></td>
+              <td>${escapeHtml(item.avatar || '')}</td>
+              <td>
+                <button data-type="member" data-action="edit" data-id="${escapeHtml(item.id)}">编辑</button>
+                <button class="danger" data-type="member" data-action="delete" data-id="${escapeHtml(item.id)}">删除</button>
+              </td>
+            </tr>
+          `).join('') : '';
+          renderTable(memberWrapper, ['姓名', '角色', '分组', '简介', '头像', '操作'], rows);
+        } catch (error) {
+          setEmpty(memberWrapper, error.message || '加载失败，请检查服务器日志。');
+        }
+      };
+
+      memberForm.addEventListener('submit', async (event) => {
+        event.preventDefault();
+        const payload = {
+          nameZh: getEl('member-name-zh').value,
+          nameEn: getEl('member-name-en').value,
+          roleZh: getEl('member-role-zh').value,
+          roleEn: getEl('member-role-en').value,
+          bioZh: getEl('member-bio-zh').value,
+          bioEn: getEl('member-bio-en').value,
+          group: getEl('member-group').value,
+          avatar: getEl('member-avatar').value,
+        };
+        const id = getEl('member-id').value;
+        try {
+          if (id) {
+            await handleRequest(`/api/members/${id}`, {
+              method: 'PUT',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(payload),
+            }, '更新成员');
+          } else {
+            await handleRequest('/api/members', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(payload),
+            }, '新增成员');
+          }
+          memberForm.reset();
+          await loadMembers();
+        } catch (error) {
+          alert(error.message);
+        }
+      });
+
+      memberWrapper.addEventListener('click', async (event) => {
+        const btn = event.target.closest('button[data-type="member"]');
+        if (!btn) return;
+        const { action, id } = btn.dataset;
+        if (!id) return;
+        if (action === 'edit') {
+          try {
+            const data = await fetchJson('/api/members', '加载团队成员');
+            const item = Array.isArray(data) ? data.find((entry) => entry.id === id) : null;
+            if (!item) return;
+            getEl('member-id').value = item.id;
+            getEl('member-name-zh').value = item.nameZh || '';
+            getEl('member-name-en').value = item.nameEn || '';
+            getEl('member-role-zh').value = item.roleZh || '';
+            getEl('member-role-en').value = item.roleEn || '';
+            getEl('member-bio-zh').value = item.bioZh || '';
+            getEl('member-bio-en').value = item.bioEn || '';
+            getEl('member-group').value = item.group || 'teacher';
+            getEl('member-avatar').value = item.avatar || '';
+          } catch (error) {
+            alert(error.message);
+          }
+          return;
+        }
+        if (action === 'delete' && confirm('确定删除该成员吗？')) {
+          try {
+            await handleRequest(`/api/members/${id}`, { method: 'DELETE' }, '删除成员');
+            await loadMembers();
+          } catch (error) {
+            alert(error.message);
+          }
+        }
+      });
+
+      const loadPublications = async () => {
+        setEmpty(pubWrapper, '正在加载出版物…');
+        try {
+          const data = await fetchJson('/api/publications', '加载出版物');
+          const rows = Array.isArray(data) ? data.map((item) => `
+            <tr>
+              <td>${formatCell(item.titleZh, item.titleEn)}</td>
+              <td>${formatCell(item.venueZh, item.venueEn)}</td>
+              <td>${escapeHtml(item.year || '')}</td>
+              <td>${escapeHtml(item.authors || '')}</td>
+              <td>${escapeHtml(getResearchLabel(item.researchId) || '未关联')}</td>
+              <td>
+                <button data-type="pub" data-action="edit" data-id="${escapeHtml(item.id)}">编辑</button>
+                <button class="danger" data-type="pub" data-action="delete" data-id="${escapeHtml(item.id)}">删除</button>
+              </td>
+            </tr>
+          `).join('') : '';
+          renderTable(pubWrapper, ['标题', '会议 / 期刊', '年份', '作者', '研究方向', '操作'], rows);
+        } catch (error) {
+          setEmpty(pubWrapper, error.message || '加载失败，请检查服务器日志。');
+        }
+      };
+
+      pubForm.addEventListener('submit', async (event) => {
+        event.preventDefault();
+        const payload = {
+          titleZh: getEl('pub-title-zh').value,
+          titleEn: getEl('pub-title-en').value,
+          venueZh: getEl('pub-venue-zh').value,
+          venueEn: getEl('pub-venue-en').value,
+          year: Number(getEl('pub-year').value) || new Date().getFullYear(),
+          authors: getEl('pub-authors').value,
+          summaryZh: getEl('pub-summary-zh').value,
+          summaryEn: getEl('pub-summary-en').value,
+          paperUrl: getEl('pub-paper').value,
+          codeUrl: getEl('pub-code').value,
+          researchId: getEl('pub-research').value,
+        };
+        const id = getEl('pub-id').value;
+        try {
+          if (id) {
+            await handleRequest(`/api/publications/${id}`, {
+              method: 'PUT',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(payload),
+            }, '更新出版物');
+          } else {
+            await handleRequest('/api/publications', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(payload),
+            }, '新增出版物');
+          }
+          pubForm.reset();
+          await loadPublications();
+        } catch (error) {
+          alert(error.message);
+        }
+      });
+
+      pubWrapper.addEventListener('click', async (event) => {
+        const btn = event.target.closest('button[data-type="pub"]');
+        if (!btn) return;
+        const { action, id } = btn.dataset;
+        if (!id) return;
+        if (action === 'edit') {
+          try {
+            const data = await fetchJson('/api/publications', '加载出版物');
+            const item = Array.isArray(data) ? data.find((entry) => entry.id === id) : null;
+            if (!item) return;
+            getEl('pub-id').value = item.id;
+            getEl('pub-title-zh').value = item.titleZh || '';
+            getEl('pub-title-en').value = item.titleEn || '';
+            getEl('pub-venue-zh').value = item.venueZh || '';
+            getEl('pub-venue-en').value = item.venueEn || '';
+            getEl('pub-year').value = item.year || '';
+            getEl('pub-authors').value = item.authors || '';
+            getEl('pub-summary-zh').value = item.summaryZh || '';
+            getEl('pub-summary-en').value = item.summaryEn || '';
+            getEl('pub-paper').value = item.paperUrl || '';
+            getEl('pub-code').value = item.codeUrl || '';
+            if (pubResearchSelect) {
+              pubResearchSelect.value = item.researchId || '';
+            }
+          } catch (error) {
+            alert(error.message);
+          }
+          return;
+        }
+        if (action === 'delete' && confirm('确定删除该出版物吗？')) {
+          try {
+            await handleRequest(`/api/publications/${id}`, { method: 'DELETE' }, '删除出版物');
+            await loadPublications();
+          } catch (error) {
+            alert(error.message);
+          }
+        }
+      });
+
+    const bootstrap = async () => {
+      await checkAuth(); // Check authentication first
+      initCollapsibleSections();
+      await loadResearchOptions();
+      await Promise.allSettled([
+        loadSlides(),
+        loadImageWallItems(),
+        loadKeyTech(),
+        loadPartners(),
+          loadMembers(),
+          loadPublications(),
+        ]);
+      };
+
+      bootstrap();
+    })();
+  </script>
+</body>
+</html>
